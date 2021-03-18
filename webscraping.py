@@ -7,105 +7,132 @@ import random
 import urllib.request
 from bs4 import BeautifulSoup
 import csv
-import numpy as np
-while True:
- #### Open webpage
- driver = webdriver.Chrome()
+#Librería para convertir una lista en un array
+#import numpy as np
+#while True:
+ # Abrir sitio web
+driver = webdriver.Chrome()
+ #url = "https://accounts.google.com/ServiceLogin?hl=es&passive=true&continue=https://groups.google.com&ec=GAZA0AM"
  #driver.get(url)
- driver.get("https://accounts.google.com/ServiceLogin?hl=es&passive=true&continue=https://groups.google.com&ec=GAZA0AM")
- # wait to load
- time.sleep(3)
+driver.get("https://accounts.google.com/ServiceLogin?hl=es&passive=true&continue=https://groups.google.com&ec=GAZA0AM")
+ # Se añade tiempo para que cargue
+time.sleep(2)
  #print(driver.result)
- ### Add email
- #Myname = driver.find_element_by_id('InputEmail')
- Myname = driver.find_element_by_id('identifierId')
- Myname.clear()
- Myname.send_keys(config.email)
+ # Añadir email
+Myname = driver.find_element_by_id('identifierId')
+Myname.clear()
+Myname.send_keys(config.email)
  #time.sleep(10)
- ### Add password
- # Add random times
- n = random.randint(0,10)
- time.sleep(n)
- #mypass = driver.find_element_by_id('InputPass')
- button = driver.find_element_by_xpath("//div[@class='VfPpkd-RLmnJb']")
- button.click()
- time.sleep(3)
- #mypass = driver.find_element_by_class('whsOnd zHQkBf')
- mypass = driver.find_element_by_xpath("//input[@name='password']")
- mypass.clear()
- mypass.send_keys(config.password)
- ### Press login button
- # Add random times
- n = random.randint(0,10)
- time.sleep(n)
- #button = driver.find_element_by_xpath("//button[@class='btn btn-base mt-4']")
- button = driver.find_element_by_xpath("//div[@class='VfPpkd-RLmnJb']")
- button.click()
+ # Añadir contraseña
+ # Se añade tiempo para que cargue
+time.sleep(2)
+button = driver.find_element_by_xpath("//div[@class='VfPpkd-RLmnJb']")
+button.click()
+time.sleep(3)
+mypass = driver.find_element_by_xpath("//input[@name='password']")
+mypass.clear()
+mypass.send_keys(config.password)
+ # Presionar el boton de login
+ # Se añade tiempo para que cargue
+time.sleep(2)
+button = driver.find_element_by_xpath("//div[@class='VfPpkd-RLmnJb']")
+button.click()
  ### go to bonuses page
- #wait to load
- time.sleep(10)
+ # Se añade tiempo para que cargue
+time.sleep(9)
 ### Press bonus button
  # Todos los grupos VP4Iue wWlgrf span DPvwYc qn15kb
- bonusbutton = driver.find_element_by_xpath("//a[@href='./all-groups']")
- bonusbutton.click()
- time.sleep(10)
+bonusbutton = driver.find_element_by_xpath("//a[@href='./all-groups']")
+bonusbutton.click()
+time.sleep(5)
  # Cliqueando en los grupos div > wWlgrf TE2Lw skrLqf, div > u7GkXe
- bonusbutton1 = driver.find_elements_by_xpath("//div[@class='u7GkXe']")
+bonusbutton1 = driver.find_elements_by_xpath("//div[@class='u7GkXe']")
  #bonusbutton1.click()
  #print(bonusbutton1)
  # Obtener URL de los emails de los departamentos div > TE2Lw
  # bonusbutton1 = driver.find_elements_by_xpath("//div[@class='TE2Lw']")
  # Obtener URL de a > href de los grupos; a > eRnJIb
- bonusbutton2 = driver.find_elements_by_xpath("//a[@class='eRnJIb']")
+bonusbutton2 = driver.find_elements_by_xpath("//a[@class='eRnJIb']")
  #break
  #print(bonusbutton1)
- lista = []
- for x in bonusbutton2:
-  lista = (x.get_attribute("href")+"/members")
-  print (lista)
-  #my_array = np.array(lista)
-  #print (my_array)
- for url in [lista]:
-  #Imprime todos los titulos de los enlaces
+with open('base_de_datos.csv', 'a') as csv_file:
+  writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
+  #First Name,Last Name,Position,Email
+  writer.writerow(['First Name','Last Name','Position','Email'])
+lista = []
+#bucle=0
+#while bucle <= len(bonusbutton2):
+for x in bonusbutton2:
+ #try:
+ lista = (x.get_attribute("href")+"/members")
+ print (lista)
+ #my_array = np.array(lista)
+ #print (my_array)
+ #f = open("fichero.txt", "a")
+ #for i in lista:
+ #    f.write(i)
+ #f.close()
+ #for url in lista:
+  # Se imprimen todos los titulos de los enlaces
   #print(x.text.strip())
-  #Imprime todos los enlaces
-  driver.get(url)
+  # Se imprimen todos los enlaces
+ time.sleep(2)
+ #driver.switch_to.new_window('tab')
+ driver.execute_script("window.open()")
+ driver.switch_to.window(driver.window_handles[1])
+ driver.get(lista)
+ print (lista)
   #bonusbutton1.click()
   #driver.get(x.get_attribute("href")+"/members")
-#Pausa la pantalla durante 3 segundo para que tengamos tiempo de confirmar que llegó a la página correcta
-  time.sleep(3)
+# Se pausa la pantalla durante 5 segundos para que tengamos tiempo de confirmar que llegó a la página correcta
+ time.sleep(2)
   #driver.get("https://groups.google.com/a/iesromerovargas.com/g/ciberseguridad-alumnado/members")
   #print(bonusbutton1);
-# Fetching the html
+ #Con el break probamos que hasta aqui todo funcione correctamente, asi evitamos que se ejecute todo el programa
+ #break
+# Capturando el html
  #request = urllib.request.Request(url)
  #content = urllib.request.urlopen(request)
-# Parsing the html 
+# Analizando el html 
  #parse = BeautifulSoup(content, 'html.parser')
-# Provide html elements' attributes to extract the data 
-  text1 = driver.find_elements_by_xpath("//a[@class='p480bb Sq3iG']")
-  text2 = driver.find_elements_by_xpath("//a[@class='p480bb Sq3iG']")
-  text3 = driver.find_elements_by_xpath("//a[@class='p480bb Sq3iG']")
-  text4 = driver.find_elements_by_xpath("//a[@class='p480bb Sq3iG']")
-  print(text2)
-  print(text1)
-# Writing extracted data in a csv file
-  with open('index.csv', 'a') as csv_file:
-    writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
+# Se proporcionan los atributos de los elementos html para extraer los datos.
+ text1 = driver.find_elements_by_xpath("//a[@class='p480bb Sq3iG']")
+ text2 = driver.find_elements_by_xpath("//a[@class='p480bb Sq3iG']")
+ text3 = driver.find_elements_by_xpath("//a[@class='p480bb Sq3iG']")
+ text4 = driver.find_elements_by_xpath("//a[@class='p480bb Sq3iG']")
+ #print(text2)
+ #print(text1)
+ print(lista)
+ #print(my_array[:,0])
+ #print(my_array[1])
+ #print(my_array[2])
+# Se escriben los datos extraídos en un archivo csv
+ with open('base_de_datos.csv', 'a') as csv_file:
+   writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
   #First Name,Last Name,Position,Email
-    writer.writerow(['First Name','Last Name','Position','Email'])
-    for col1,col2,col3,col4 in zip(text1, text2, text3, text4):
-      col2 = ""
-      if col3.text.strip().find("alu") >= 0:
-          col3 = ("Alumno");
-      else:
-          col3 = ("Profesor");
-      writer.writerow([col1.text.split("@")[0],col2, col3 ,col4.text.strip()])
-  time.sleep(10)
+   #writer.writerow(['First Name','Last Name','Position','Email'])
+   for col1,col2,col3,col4 in zip(text1, text2, text3, text4):
+     col2 = ""
+     if col3.text.strip().find("alu") >= 0:
+         col3 = ("Alumno");
+     else:
+         col3 = ("Profesor");
+     writer.writerow([col1.text.split("@")[0],col2, col3 ,col4.text.strip()])
+ #driver.execute_script("window.history.go(-1)")
+ #Se cierra una ventana o pestaña
+ driver.close()
+ #Se cambia el controlador a la ventana o pestaña original
+ driver.switch_to.window(driver.window_handles[0])
+ time.sleep(10)
+ print(lista)
+ #except:
+    #raise
+    #pass
+     #bucle +=1
   #driver.quit()
-  driver.execute_script("window.history.go(-1)")
   #driver.back()
-  time.sleep(10)
- #break
+  #driver.refresh()
+  #time.sleep(10)
  # Cliqueando en los Miembros kWxq2b VP4Iue gn3Lk class 
  #bonusbutton2 = driver.find_element_by_xpath("//a[@jslog='83026; track:click; index:0;']")
  #bonusbutton2.click()
@@ -120,6 +147,6 @@ while True:
  #url = (driver.current_url)
  #print(url);
 
- ### Close page
- driver.close()
- time.sleep(60*60) #Esperar 1h para cliclear de nuevo, sino estará en bucle analizando
+ ### Se cierra la página
+#driver.close()
+time.sleep(60*60) #Esperar 1h para cliclear de nuevo, sino estará en bucle analizando
