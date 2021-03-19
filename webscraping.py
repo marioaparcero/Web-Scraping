@@ -7,8 +7,6 @@ import random
 import urllib.request
 from bs4 import BeautifulSoup
 import csv
-#Librería para convertir una lista en un array
-#import numpy as np
 #while True:
  # Abrir sitio web
 driver = webdriver.Chrome()
@@ -58,66 +56,44 @@ bonusbutton2 = driver.find_elements_by_xpath("//a[@class='eRnJIb']")
 with open('base_de_datos.csv', 'a') as csv_file:
   writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
   #First Name,Last Name,Position,Email
-  writer.writerow(['First Name','Last Name','Position','Email'])
+  writer.writerow(['First Name','Last Name','Position','Email', 'Departamento'])
 lista = []
-#bucle=0
-#while bucle <= len(bonusbutton2):
 for x in bonusbutton2:
- #try:
  lista = (x.get_attribute("href")+"/members")
- print (lista)
- #my_array = np.array(lista)
- #print (my_array)
- #f = open("fichero.txt", "a")
- #for i in lista:
- #    f.write(i)
- #f.close()
- #for url in lista:
-  # Se imprimen todos los titulos de los enlaces
-  #print(x.text.strip())
-  # Se imprimen todos los enlaces
+ print ("Accediendo a " + lista)
+ #Se imprimen todos los titulos de los enlaces
+ print ("Departamento: " + x.text.strip())
  time.sleep(2)
  #driver.switch_to.new_window('tab')
  driver.execute_script("window.open()")
  driver.switch_to.window(driver.window_handles[1])
  driver.get(lista)
- print (lista)
-  #bonusbutton1.click()
-  #driver.get(x.get_attribute("href")+"/members")
-# Se pausa la pantalla durante 5 segundos para que tengamos tiempo de confirmar que llegó a la página correcta
+ # Se imprimen todos los enlaces
+ #print (lista)
+ # Se pausa la pantalla durante 5 segundos para que tengamos tiempo de confirmar que llegó a la página correcta
  time.sleep(2)
-  #driver.get("https://groups.google.com/a/iesromerovargas.com/g/ciberseguridad-alumnado/members")
-  #print(bonusbutton1);
- #Con el break probamos que hasta aqui todo funcione correctamente, asi evitamos que se ejecute todo el programa
- #break
-# Capturando el html
- #request = urllib.request.Request(url)
- #content = urllib.request.urlopen(request)
-# Analizando el html 
- #parse = BeautifulSoup(content, 'html.parser')
-# Se proporcionan los atributos de los elementos html para extraer los datos.
+ # Se proporcionan los atributos de los elementos html para extraer los datos.
  text1 = driver.find_elements_by_xpath("//a[@class='p480bb Sq3iG']")
  text2 = driver.find_elements_by_xpath("//a[@class='p480bb Sq3iG']")
  text3 = driver.find_elements_by_xpath("//a[@class='p480bb Sq3iG']")
  text4 = driver.find_elements_by_xpath("//a[@class='p480bb Sq3iG']")
+ text5 = driver.find_elements_by_xpath("//a[@class='p480bb Sq3iG']")
+ text6 = driver.find_elements_by_xpath("//h1[@class='KdPHLc']")
  #print(text2)
  #print(text1)
- print(lista)
- #print(my_array[:,0])
- #print(my_array[1])
- #print(my_array[2])
+ #print(lista)
 # Se escriben los datos extraídos en un archivo csv
  with open('base_de_datos.csv', 'a') as csv_file:
    writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
   #First Name,Last Name,Position,Email
-   #writer.writerow(['First Name','Last Name','Position','Email'])
-   for col1,col2,col3,col4 in zip(text1, text2, text3, text4):
+   for col1,col2,col3,col4,col5 in zip(text1, text2, text3, text4, text5):
      col2 = ""
      if col3.text.strip().find("alu") >= 0:
          col3 = ("Alumno");
      else:
          col3 = ("Profesor");
-     writer.writerow([col1.text.split("@")[0],col2, col3 ,col4.text.strip()])
+     col5 = text6[0].text
+     writer.writerow([col1.text.split("@")[0],col2, col3 ,col4.text.strip(), col5])
  #driver.execute_script("window.history.go(-1)")
  #Se cierra una ventana o pestaña
  driver.close()
@@ -125,14 +101,11 @@ for x in bonusbutton2:
  driver.switch_to.window(driver.window_handles[0])
  time.sleep(10)
  print(lista)
- #except:
-    #raise
-    #pass
-     #bucle +=1
-  #driver.quit()
-  #driver.back()
-  #driver.refresh()
-  #time.sleep(10)
+ #driver.quit()
+ #driver.back()
+ #driver.refresh()
+ #time.sleep(10)
+ #break
  # Cliqueando en los Miembros kWxq2b VP4Iue gn3Lk class 
  #bonusbutton2 = driver.find_element_by_xpath("//a[@jslog='83026; track:click; index:0;']")
  #bonusbutton2.click()
@@ -140,13 +113,6 @@ for x in bonusbutton2:
  #time.sleep(10)
  #print(driver.title);
  #print(driver.current_url);
- #url = 'https://groups.google.com/all-groups/'
- #url = 'https://groups.google.com/a/iesromerovargas.com/g/3a-profesorado/members'
- #url = 'https://groups.google.com/a/iesromerovargas.com/g/1-eso-c-alumnado/members'
- #url = 'file:///home/debian/Escritorio/lista.html'
- #url = (driver.current_url)
- #print(url);
-
  ### Se cierra la página
 #driver.close()
 time.sleep(60*60) #Esperar 1h para cliclear de nuevo, sino estará en bucle analizando
