@@ -34,15 +34,16 @@ while True:
  #nododepartamentos = driver.find_elements_by_xpath("//div[@class='TE2Lw']")
  ## Obtener URL los grupos
  nodogrupos = driver.find_elements_by_xpath("//a[@class='eRnJIb']")
- ## Para que los datos se guarden en un solo archivo csv primero se crean las cabeceras
- with open('base_de_datos.csv', 'a') as csv_file:
-   writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
-   writer.writerow(['First Name','Last Name','Position','Email', 'Departamento'])
  lista = []
  for x in nodogrupos:
   lista = (x.get_attribute("href")+"/members")
   ## Se imprimen todos los titulos de los enlaces
   print ("Departamento: " + x.text.strip())
+  archivo = x.text.strip() + '.csv'
+  print ("Creando el archivo..." + archivo)
+  with open(archivo, 'a') as csv_file:
+    writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
+    writer.writerow(['First Name','Last Name','Position','Email', 'Departamento'])
   ## Se imprimen todos las url de los grupos
   print ("Accediendo a " + lista)
   driver.execute_script("window.open()")
@@ -55,8 +56,8 @@ while True:
   campo4 = driver.find_elements_by_xpath("//a[@class='p480bb Sq3iG']")
   campo5 = driver.find_elements_by_xpath("//a[@class='p480bb Sq3iG']")
   campo6 = driver.find_elements_by_xpath("//h1[@class='KdPHLc']")
-  ## Se escriben los datos extraídos en el archivo csv que antes creamos
-  with open('base_de_datos.csv', 'a') as csv_file:
+  ## Se escriben los datos extraídos en un archivo csv
+  with open(archivo, 'a') as csv_file:
     writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
     for col1,col2,col3,col4,col5 in zip(campo1, campo2, campo3, campo4, campo5):
       col2 = ""
